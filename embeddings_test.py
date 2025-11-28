@@ -10,7 +10,7 @@ from typing import Optional, List, Dict
 app = FastAPI()
 
 # Load model once at startup (not per request)
-print("Loading sentence-transformers model.. .", flush=True)
+print("Loading sentence-transformers model...", flush=True)
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 print("Model loaded successfully", flush=True)
 
@@ -20,7 +20,7 @@ _ = model.encode("warmup text", show_progress_bar=False)
 print("Model warmed up and ready", flush=True)
 
 # ✅ Secure configuration
-QDRANT_URL = "https://558d3fea-5962-46da-bffa-94aba210a6c6.eu-west-1-0.aws.cloud.qdrant.io"
+QDRANT_URL = "https://558d3fea-5962-46da-bffa-94aba210a6c6.eu-west-1-0.aws.cloud. qdrant.io"
 QDRANT_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwiZXhwIjoxNzY2NjcwMTM1fQ.c2bNP_BNXhVhM3fApCyKHw7SGV1ITyDMDtT5s1WlGW8"
 
 # Collection names
@@ -71,7 +71,7 @@ def create_segments_collection():
             qdrant_client.create_payload_index(
                 collection_name=SEGMENTS_COLLECTION,
                 field_name="start_time",
-                field_schema=models. PayloadSchemaType.FLOAT
+                field_schema=models.PayloadSchemaType.FLOAT
             )
             
             print(f"✓ Collection '{SEGMENTS_COLLECTION}' created successfully", flush=True)
@@ -84,7 +84,7 @@ def create_segments_collection():
 def create_legacy_collection():
     """Create the legacy text_embeddings collection"""
     try:
-        collections = qdrant_client.get_collections().collections
+        collections = qdrant_client.get_collections(). collections
         collection_names = [c.name for c in collections]
         
         if LEGACY_COLLECTION not in collection_names:
@@ -169,7 +169,7 @@ async def embed_video(data: dict):
                 continue
             
             # Store text and metadata for batch processing
-            texts_to_embed. append(text)
+            texts_to_embed.append(text)
             segment_metadata.append({
                 'idx': idx,
                 'speaker': speaker,
@@ -192,7 +192,7 @@ async def embed_video(data: dict):
         batch_start_time = datetime.utcnow()
         vectors = model.encode(texts_to_embed, show_progress_bar=False, batch_size=32). tolist()
         batch_end_time = datetime.utcnow()
-        batch_duration = (batch_end_time - batch_start_time).total_seconds()
+        batch_duration = (batch_end_time - batch_start_time). total_seconds()
         print(f"✓ Batch embedding completed in {batch_duration:. 2f} seconds", flush=True)
         
         # Create points with pre-computed embeddings
@@ -581,7 +581,7 @@ async def get_video_segments(video_id: int, limit: int = 100, offset: int = 0):
             "segments": [
                 {
                     "segment_index": p.payload.get("segment_index"),
-                    "speaker": p.payload.get("speaker"),
+                    "speaker": p. payload.get("speaker"),
                     "start_time": p.payload.get("start_time"),
                     "end_time": p.payload.get("end_time"),
                     "duration": p.payload.get("duration"),
@@ -633,18 +633,18 @@ async def health():
 async def stats():
     """Get collection statistics"""
     try:
-        collection_info = qdrant_client.get_collection(collection_name=SEGMENTS_COLLECTION)
+        collection_info = qdrant_client. get_collection(collection_name=SEGMENTS_COLLECTION)
         
         return {
             "collection": SEGMENTS_COLLECTION,
             "points_count": collection_info.points_count,
-            "vectors_count": collection_info. vectors_count,
+            "vectors_count": collection_info.vectors_count,
             "indexed_vectors_count": collection_info.indexed_vectors_count,
-            "status": collection_info. status,
+            "status": collection_info.status,
             "optimizer_status": collection_info.optimizer_status,
             "config": {
-                "vector_size": collection_info.config.params.vectors.size,
-                "distance": collection_info.config.params. vectors.distance. name
+                "vector_size": collection_info. config.params.vectors.size,
+                "distance": collection_info.config.params.vectors.distance. name
             }
         }
     except Exception as e:
@@ -677,7 +677,7 @@ async def root():
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 9000))
+    port = int(os. getenv("PORT", 9000))
     print(f"🚀 Starting FastAPI Video Embedding Service on port {port}...", flush=True)
     print(f"📊 Qdrant URL: {QDRANT_URL}", flush=True)
     print(f"📦 Collections: {SEGMENTS_COLLECTION}, {LEGACY_COLLECTION}", flush=True)
