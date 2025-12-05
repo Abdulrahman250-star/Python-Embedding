@@ -552,7 +552,7 @@ async def search(data: dict):
             for r in sem_search_results:
                 semantic_results.append({
                     "id": r. id,
-                    "score": float(getattr(r, "score", 0. 0)),
+                    "score": float(getattr(r, "score", 0.0)),
                     "video_id": r. payload.get("video_id"),
                     "video_title": r.payload. get("video_title", ""),
                     "speaker": r.payload. get("speaker", ""),
